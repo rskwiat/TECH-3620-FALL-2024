@@ -42,11 +42,10 @@ export default function RegisterUser() {
   return (
     <SafeAreaView style={styles.container}>
       <Text
-        style={{
-          color: colorScheme ? Colors[colorScheme].text : '',
-        }}
+        variant="titleLarge"
+        style={styles.header}
       >
-        Register for an Account
+        Sign Up
       </Text>
 
       <View style={styles.inputWrapper}>
@@ -99,7 +98,6 @@ export default function RegisterUser() {
       </View>
 
       <View style={styles.inputWrapper}>
-
         <Controller
           control={control}
           name='password'
@@ -121,13 +119,17 @@ export default function RegisterUser() {
         disabled={!isValid}
         theme={ButtonTheme}
         onPress={handleSubmit(onSubmit)}>
-        Sign Up
+        Register User
       </Button>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    marginTop: 20,
+    marginBottom: 40,
+  },
   container: {
     marginHorizontal: 20,
   },
