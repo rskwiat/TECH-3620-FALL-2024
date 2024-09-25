@@ -3,8 +3,10 @@ import { Button, Text } from "react-native-paper";
 import { Link } from 'expo-router';
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
+import { useAuth } from "@/context/auth";
 export default function LoginScreen() {
   const colorScheme = useColorScheme();
+  const { appSignIn } = useAuth();
 
   return (
     <SafeAreaView>
@@ -15,7 +17,7 @@ export default function LoginScreen() {
           color: colorScheme ? Colors[colorScheme].text : '',
         }}
       >
-        Welcome to Kean Social Media TBD.
+        Welcome to Kean Social Media.
       </Text>
 
       <Button mode='contained' onPress={() => console.log('error')}>

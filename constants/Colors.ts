@@ -6,10 +6,16 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const ButtonTheme = {
+export const DarkButtonTheme = {
   colors: {
     onSurfaceDisabled: '#999',
     surfaceDisabled: '#ccc'
+  }
+}
+
+export const DarkTextTheme = {
+  colors: {
+    onSurface: '#fff'
   }
 }
 

@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '@/context/auth';
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Colors, ButtonTheme } from "@/constants/Colors";
+import { DarkButtonTheme, DarkTextTheme } from "@/constants/Colors";
 import { RegisterUserSchema, RegisterUserSchemaType } from '@/schemas/registerUserSchema';
 
 export default function RegisterUser() {
@@ -43,6 +43,7 @@ export default function RegisterUser() {
     <SafeAreaView style={styles.container}>
       <Text
         variant="titleLarge"
+        theme={colorScheme === 'dark' ? DarkTextTheme : undefined}
         style={styles.header}
       >
         Sign Up
@@ -117,7 +118,7 @@ export default function RegisterUser() {
       <Button
         mode='contained'
         disabled={!isValid}
-        theme={ButtonTheme}
+        theme={colorScheme === 'dark' ? DarkButtonTheme : undefined}
         onPress={handleSubmit(onSubmit)}>
         Register User
       </Button>
