@@ -112,8 +112,8 @@ export function AuthProvider({ children }) {
 
     try {
       const resp = await pb?.collection('users').create(data);
-      setUser(pb?.authStore.isValid ? pb.authStore.model : null);
-      setIsLoggedIn(pb?.authStore.isValid ?? false);
+      await setUser(pb?.authStore.isValid ? pb.authStore.model : null);
+      await setIsLoggedIn(pb?.authStore.isValid ?? false);
       return { user: resp, pb };
     } catch (e) {
       return { error: e };
