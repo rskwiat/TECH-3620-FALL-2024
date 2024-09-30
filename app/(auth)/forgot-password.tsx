@@ -12,7 +12,7 @@ import { ForgotPasswordSchema, ForgotPasswordType } from '@/schemas/forgotPasswo
 export default function ForgotPassword() {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { } = useAuth();  //forgot password is missing
+  const { resetPassword } = useAuth();  //forgot password is missing
 
   const {
     control,
@@ -26,6 +26,7 @@ export default function ForgotPassword() {
   });
 
   const onSubmit = async (data: any) => {
+    resetPassword(data.email);
     alert(data); //sends to forgot password api
   }
 

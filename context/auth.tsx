@@ -8,6 +8,7 @@ type Auth = {
   appSignIn: (email, password) => void;
   appSignOut: () => void;
   createAccount: (data) => void;
+  resetPassword: (email) => void;
   user: any,
   isLoggedIn: boolean,
   isInitialized: boolean;
@@ -120,6 +121,17 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const resetPassword = async (email) => {
+    if (!pb) return { error: 'PocketBase not initialized' };
+
+    try {
+      const resp = await pb.collection('users').requestPasswordReset(email);
+      return { user: resp };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
   useProtectedRoute(user, isInitialized);
 
   return (
@@ -129,6 +141,7 @@ export function AuthProvider({ children }) {
         appSignOut,
         createAccount,
         user,
+        resetPassword,
         isLoggedIn,
         isInitialized
       }}
