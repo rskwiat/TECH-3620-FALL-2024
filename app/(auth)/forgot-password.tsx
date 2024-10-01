@@ -8,11 +8,10 @@ import { useAuth } from '@/context/auth';
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ForgotPasswordSchema, ForgotPasswordType } from '@/schemas/forgotPasswordSchema';
 
-
 export default function ForgotPassword() {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { resetPassword } = useAuth();  //forgot password is missing
+  const { resetPassword } = useAuth();
 
   const {
     control,
@@ -27,10 +26,7 @@ export default function ForgotPassword() {
 
   const onSubmit = async (data: any) => {
     resetPassword(data.email);
-    alert(data); //sends to forgot password api
   }
-
-  console.log(errors, isValid);
 
   return (
     <SafeAreaView>
@@ -51,6 +47,8 @@ export default function ForgotPassword() {
             )
           }}
         />
+
+
         <Text>{errors.email && errors?.email?.message as string}</Text>
       </View>
 
