@@ -40,6 +40,7 @@ export default function ForgotPassword() {
             return (
               <TextInput
                 label="E-Mail"
+                autoCapitalize="none"
                 value={props.field.value}
                 onBlur={props.field.onBlur}
                 onChangeText={(value) => props.field.onChange(value)}
@@ -47,7 +48,6 @@ export default function ForgotPassword() {
             )
           }}
         />
-
 
         <Text>{errors.email && errors?.email?.message as string}</Text>
       </View>

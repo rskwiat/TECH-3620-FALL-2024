@@ -33,7 +33,6 @@ export default function RegisterUser() {
 
     try {
       await createAccount(passwordUpdate);
-      router.replace('/(tabs)');
     } catch (e) {
       console.error(e);
     }
@@ -72,8 +71,9 @@ export default function RegisterUser() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               label="UserName"
-              value={value}
-              onBlur={onBlur}
+              autoCapitalize="none"
+              value={value} //props.field.value
+              onBlur={onBlur} //props.field.onBlur
               onChangeText={value => onChange(value)}
             />
           )}
@@ -88,9 +88,10 @@ export default function RegisterUser() {
           render={({ field: { onChange, value, onBlur } }) => (
             <TextInput
               label="Email"
+              autoCapitalize="none"
               keyboardType='email-address'
-              value={value}
-              onBlur={onBlur}
+              value={value} //props.field.value
+              onBlur={onBlur} //props.field.onBlur
               onChangeText={value => onChange(value)}
             />
           )}
@@ -106,6 +107,7 @@ export default function RegisterUser() {
             <TextInput
               label="Password"
               secureTextEntry
+              autoCapitalize="none"
               value={value}
               onBlur={onBlur}
               onChangeText={value => onChange(value)}

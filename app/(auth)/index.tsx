@@ -1,14 +1,16 @@
-import { StyleSheet, SafeAreaView } from "react-native";
+import { useState } from "react";
+import { StyleSheet, SafeAreaView, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { Link } from 'expo-router';
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Colors } from "@/constants/Colors";
+import { Colors, DarkButtonTheme, DarkTextTheme } from "@/constants/Colors";
 import { useAuth } from "@/context/auth";
 import { LoginUser, LoginUserType } from "@/schemas/loginUserSchema";
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function LoginScreen() {
+  const [submissionError, setSubmissionError] = useState('');
   const colorScheme = useColorScheme();
   const { appSignIn } = useAuth();
 
@@ -23,77 +25,81 @@ export default function LoginScreen() {
     'mode': 'onBlur'
   });
 
-
-
-
-  const onSubmit = async (data: any) => {
-    try {
-      console.log('Form submitted with data:', data);
-      // Add your form submission logic here
-      await appSignIn(data.email, data.password);
-    } catch (e) {
-      console.log('Error during form submission:', e);
+  const onSubmit = async ({ email, password }: any) => {
+    const resp: any = await appSignIn(email, password);
+    if (resp?.error) {
+      setSubmissionError('An error has occured');
     }
   };
 
   return (
-    <SafeAreaView>
-      <Text
-        variant="displaySmall"
-        style={{
-          ...styles.header,
-          color: colorScheme ? Colors[colorScheme].text : '',
-        }}
-      >
-        Welcome to Kean Social Media.
-      </Text>
+    <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
+      <View style={styles.card}>
+        <Text
+          variant="titleLarge"
+          style={styles.header}
+          theme={colorScheme === 'dark' ? DarkTextTheme : undefined}
+        >
+          Welcome.
+        </Text>
 
-      <Controller
-        control={control}
-        name="email"
-        render={(props) => {
-          return (
-            <TextInput
-              label="E-mail"
-              autoCapitalize="none"
-              value={props.field.value}
-              onChangeText={(value) => props.field.onChange(value)}
-            />
-          );
-        }}
-      />
-
-      <Controller
-        control={control}
-        name='password'
-        render={({ field: { onChange, value, onBlur } }) => (
-          <TextInput
-            label="Password"
-            secureTextEntry
-            value={value}
-            onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+        <View style={styles.inputWrapper}>
+          <Controller
+            control={control}
+            name='email'
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                label="E-Mail"
+                autoCapitalize="none"
+                value={value} //props.field.value
+                onBlur={onBlur} //props.field.onBlur
+                onChangeText={value => onChange(value)}
+              />
+            )}
           />
-        )}
-      />
+          <Text>{errors.email && errors?.email?.message as string}</Text>
+        </View>
 
-      <Button onPress={() => {
-        console.log('Submit button pressed');
-        console.log('Form is valid:', isValid, errors);
+        <View style={styles.inputWrapper}>
+          <Controller
+            control={control}
+            name='password'
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                label="Password"
+                secureTextEntry
+                value={value} //props.field.value
+                onBlur={onBlur} //props.field.onBlur
+                onChangeText={value => onChange(value)}
+              />
+            )}
+          />
+          <Text>{errors.password && errors?.password?.message as string}</Text>
+        </View>
 
-        handleSubmit(onSubmit)();
-      }}>
-        Submit
-      </Button>
+        <Button
+          theme={colorScheme === 'dark' ? DarkButtonTheme : undefined}
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+        >
+          Submit
+        </Button>
+        <Text>{submissionError}</Text>
 
+        <Button
+          theme={colorScheme === 'dark' ? DarkButtonTheme : undefined}
+          mode="text"
+          compact
+          style={{ width: 170 }}
+        >
+          <Link href="/(auth)/forgot-password">
+            Forgot your password?
+          </Link>
+        </Button>
 
-      <Button mode="text" style={styles.registerButton}>
-        <Link href="/(auth)/forgot-password">
-          Forgot your password?
-        </Link>
-      </Button>
+      </View>
 
-      <Button mode="text" style={styles.registerButton}>
+      <Button mode="text">
         <Link href="/(auth)/register">
           Need an account? Register here.
         </Link>
@@ -105,12 +111,14 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   header: {
-    textAlign: 'center',
-    marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 20,
   },
-  registerButton: {
-    marginTop: 40,
-    textAlign: 'center',
+  inputWrapper: {
+    marginBottom: 20,
+  },
+  card: {
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 20,
   }
 });
