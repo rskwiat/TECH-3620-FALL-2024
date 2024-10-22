@@ -3,10 +3,19 @@ import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/auth";
 
-export default function NavBar() {
+export default function NavBar({
+  title = "Welcome",
+  profileButtonIsDisabled = false,
+}) {
   //navigation
   const router = useRouter();
   const { appSignOut } = useAuth();
+
+  const onMyProfilePress = () => {
+    if (!profileButtonIsDisabled) {
+      router.push('/(tabs)/myProfile');
+    }
+  }
 
   const onLogoutPress = () => {
     Alert.alert(
@@ -30,15 +39,14 @@ export default function NavBar() {
       <Appbar.Action
         size={30}
         icon="account-circle"
-        onPress={() => { console.log('works') }} />
+        onPress={() => onMyProfilePress()} />
       <Appbar.Content
-        title="Weclome" />
+        title={title} />
       <Appbar.Action
         icon="logout"
         size={30}
         onPress={() => onLogoutPress()}
       />
-
     </Appbar >
   );
 }

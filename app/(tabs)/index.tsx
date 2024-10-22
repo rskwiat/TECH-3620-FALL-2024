@@ -11,10 +11,13 @@ export default function HomeScreen() {
   const logOut = async () => appSignOut();
 
   return (
-    <View>
+    <>
       <NavBar />
-      {/* <ThemedText>{user.username}</ThemedText> */}
-    </View>
+      <View>
+        {/* <ThemedText>{user.username}</ThemedText> */}
+      </View>
+    </>
+
   );
 }
 
