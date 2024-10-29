@@ -1,41 +1,48 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
+import { useState, useEffect } from "react";
+import {
+  View,
+  SafeAreaView,
+  ScrollView
+} from "react-native";
 
-import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/context/auth';
+import { Button, Text } from "react-native-paper";
 
-import NavBar from '@/components/navigation/NavBar';
+import NavBar from "@/components/navigation/NavBar";
+import Posts from "@/components/Posts";
+import pb from "@/lib/pocketbase";
 
 export default function HomeScreen() {
-  const { user, appSignOut } = useAuth();
+  const [posts, setPosts] = useState([] as any);
 
-  const logOut = async () => appSignOut();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { items } = await pb.collection('posts').getList(1, 50);
+      setPosts(items);
+    }
+
+    fetchData();
+  }, []);
 
   return (
-    <>
-      <NavBar />
-      <View>
-        {/* <ThemedText>{user.username}</ThemedText> */}
-      </View>
-    </>
+    <View style={{ flex: 1 }}>
+      <NavBar title="Posts" />
+      <Button
+        mode="contained"
+        style={{
+          marginTop: 20,
+          marginBottom: 40,
+          marginHorizontal: 20
+        }}
+        onPress={() => console.log("posts page")}
+      >
+        Create Post
+      </Button>
+      <ScrollView>
+        {posts.map((post: any, i: any) => {
+          return <Posts key={i} data={post} />
+        })}
+      </ScrollView>
 
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
