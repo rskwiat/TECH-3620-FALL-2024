@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { View } from "react-native";
+import { useState, useEffect, useMemo } from "react";
+import { View, Alert } from "react-native";
 import {
   Card,
   Text,
@@ -8,9 +8,12 @@ import {
 } from "react-native-paper";
 
 import pb from "@/lib/pocketbase";
+import { useAuth } from "@/context/auth";
 
-export default function Posts({ data }: any) {
+export default function Posts({ data, refetch }: any) {
+  const { user: currentUser } = useAuth();
   const [user, setUser] = useState({} as any);
+
   const cleanedText = data.post.replace(/<\/?p>/g, '').replace(/&rsquo;/g, "'").replace(/&mdash;/g, '-');
   const date = new Date(data.created).toLocaleString();
 
@@ -23,9 +26,29 @@ export default function Posts({ data }: any) {
         image: imageUrl,
         username: userCollection.username
       });
-    };
+    }
     getAvatar();
-  }, [data]);
+  }, []);
+
+  const deletePost = (id: string) => {
+    Alert.alert(
+      'Delete Post',
+      'Are you sure',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            await pb.collection('posts').delete(id);
+            await refetch();
+          }
+        },
+      ]
+    );
+  }
 
   return (
     <View>
@@ -57,11 +80,13 @@ export default function Posts({ data }: any) {
             <Text variant="bodySmall">Reply</Text>
           </Button>
 
-          <Button
-            onPress={() => { console.log('delete post', data.id) }}
-          >
-            <Text variant="bodySmall">Delete</Text>
-          </Button>
+          {currentUser.id === data.userId &&
+            <Button
+              onPress={() => deletePost(data.id)}
+            >
+              <Text variant="bodySmall">Delete</Text>
+            </Button>
+          }
         </Card.Content>
 
 

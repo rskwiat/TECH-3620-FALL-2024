@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Stack, useNavigation } from "expo-router";
 import {
   View,
   SafeAreaView,
@@ -12,16 +13,21 @@ import Posts from "@/components/Posts";
 import pb from "@/lib/pocketbase";
 
 export default function HomeScreen() {
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
   const [posts, setPosts] = useState([] as any);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { items } = await pb.collection('posts').getList(1, 50);
-      setPosts(items);
-    }
+  const fetchData = async () => {
+    const { items } = await pb.collection('posts').getList(page, 6);
+    const total = await pb.collection('posts').getFullList();
+    const max = Math.round(total.length / 6);
+    setMaxPage(max);
+    setPosts(items);
+  }
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [page]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -39,8 +45,26 @@ export default function HomeScreen() {
       </Button>
       <ScrollView>
         {posts.map((post: any, i: any) => {
-          return <Posts key={i} data={post} />
+          return <Posts key={i} data={post} refetch={fetchData} />
         })}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginBottom: 40
+        }}>
+          <Button
+            disabled={page === 1}
+            onPress={() => setPage(page - 1)}
+          >
+            Previous
+          </Button>
+          <Button
+            disabled={page === maxPage}
+            onPress={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </View>
       </ScrollView>
 
     </View>
