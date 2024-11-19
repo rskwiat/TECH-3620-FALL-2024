@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   View,
   SafeAreaView,
@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [posts, setPosts] = useState([] as any);
+  const router = useRouter();
 
   const fetchData = async () => {
     const { items } = await pb.collection('posts').getList(page, 6);
@@ -39,7 +40,7 @@ export default function HomeScreen() {
           marginBottom: 40,
           marginHorizontal: 20
         }}
-        onPress={() => console.log("posts page")}
+        onPress={() => router.replace('/(tabs)/createPost')}
       >
         Create Post
       </Button>
@@ -66,7 +67,6 @@ export default function HomeScreen() {
           </Button>
         </View>
       </ScrollView>
-
     </View>
   );
 }
