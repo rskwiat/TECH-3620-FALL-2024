@@ -6,7 +6,7 @@ import {
   ScrollView
 } from "react-native";
 
-import { Button, Text } from "react-native-paper";
+import { Button, Text, FAB } from "react-native-paper";
 
 import NavBar from "@/components/navigation/NavBar";
 import Posts from "@/components/Posts";
@@ -44,14 +44,16 @@ export default function HomeScreen() {
       >
         Create Post
       </Button>
-      <ScrollView>
+
+      <ScrollView style={{ flex: 1 }}>
+
         {posts.map((post: any, i: any) => {
           return <Posts key={i} data={post} refetch={fetchData} />
         })}
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
-          marginBottom: 40
+          marginBottom: 120
         }}>
           <Button
             disabled={page === 1}
@@ -67,6 +69,19 @@ export default function HomeScreen() {
           </Button>
         </View>
       </ScrollView>
+      <View style={{
+        position: 'absolute',
+        right: 25,
+        bottom: 25,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        zIndex: 50,
+      }}>
+        <FAB
+          icon='plus'
+          onPress={() => router.replace('/(tabs)/createPost')}
+        />
+      </View>
     </View>
   );
 }
