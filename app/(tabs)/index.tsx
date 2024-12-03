@@ -46,7 +46,6 @@ export default function HomeScreen() {
       </Button>
 
       <ScrollView style={{ flex: 1 }}>
-
         {posts.map((post: any, i: any) => {
           return <Posts key={i} data={post} refetch={fetchData} />
         })}

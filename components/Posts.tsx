@@ -6,6 +6,7 @@ import {
   Avatar,
   Button,
 } from "react-native-paper";
+import { Link } from "expo-router";
 
 import pb from "@/lib/pocketbase";
 import { useAuth } from "@/context/auth";
@@ -54,7 +55,10 @@ export default function Posts({ data, refetch }: any) {
     <View>
       <Card style={{ marginHorizontal: 20, marginBottom: 20 }}>
         <Card.Content>
-          <Avatar.Image size={75} source={{ uri: user.image }} />
+          <Link href={`/(tabs)/users/${user.id}`}>
+            <Avatar.Image size={75} source={{ uri: user.image }} />
+          </Link>
+
           <Text variant="bodySmall">{user.username}</Text>
 
           <Text variant="titleMedium">{data.title}</Text>
