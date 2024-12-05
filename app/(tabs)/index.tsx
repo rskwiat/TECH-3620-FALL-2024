@@ -6,13 +6,14 @@ import {
   ScrollView
 } from "react-native";
 
-import { Button, Text, FAB } from "react-native-paper";
+import { Button, Text, FAB, useTheme } from "react-native-paper";
 
 import NavBar from "@/components/navigation/NavBar";
 import Posts from "@/components/Posts";
 import pb from "@/lib/pocketbase";
 
 export default function HomeScreen() {
+  const theme = useTheme();
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [posts, setPosts] = useState([] as any);
@@ -31,8 +32,7 @@ export default function HomeScreen() {
   }, [page]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <NavBar title="Posts" />
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Button
         mode="contained"
         style={{

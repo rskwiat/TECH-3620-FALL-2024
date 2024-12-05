@@ -7,6 +7,8 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '@/context/auth';
+import { PaperProvider } from 'react-native-paper';
+import CustomNavigationBar from '@/components/navigation/CustomNavBar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,13 +30,19 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: true }}>
-          <Stack.Screen name='(tabs)' />
-          <Stack.Screen name='+not-found' />
-        </Stack>
-      </ThemeProvider>
-    </AuthProvider>
+    <PaperProvider>
+      <AuthProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack
+            initialRouteName='(tabs)'
+            screenOptions={{
+              header: (props) => <CustomNavigationBar {...props} />
+            }}>
+            <Stack.Screen name='(tabs)' options={{ title: 'Posts' }} />
+            <Stack.Screen name='+not-found' />
+          </Stack>
+        </ThemeProvider>
+      </AuthProvider>
+    </PaperProvider>
   );
 }

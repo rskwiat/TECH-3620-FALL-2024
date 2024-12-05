@@ -4,17 +4,21 @@ import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/auth";
 
-export default function CustomNavigationBar(props: any) {
-
-  // const title = getHeaderTitle(options, route.name);
+export default function CustomNavigationBar({
+  navigation,
+  route,
+  options,
+  back
+}) {
+  const name = route?.name || "";
+  const title = getHeaderTitle(options, name);
   const router = useRouter();
+
   const { appSignOut } = useAuth();
 
-  // const onMyProfilePress = () => {
-  //   if (!profileButtonIsDisabled) {
-  //     router.push('/(tabs)/myProfile');
-  //   }
-  // }
+  const onMyProfilePress = () => {
+    router.replace('/(tabs)/myProfile');
+  }
 
   const onLogoutPress = () => {
     Alert.alert(
@@ -37,8 +41,8 @@ export default function CustomNavigationBar(props: any) {
       <Appbar.Action
         size={30}
         icon="account-circle"
-        onPress={() => console.log('back or e')} />
-      {/* <Appbar.Content title={title} /> */}
+        onPress={() => onMyProfilePress()} />
+      <Appbar.Content title={title} />
       <Appbar.Action
         icon="logout"
         size={30}

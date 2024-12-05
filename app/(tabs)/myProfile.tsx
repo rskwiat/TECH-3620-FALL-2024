@@ -4,25 +4,27 @@ import {
   Text,
   Card,
   Button,
+  useTheme,
 } from "react-native-paper";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import NavBar from "@/components/navigation/NavBar";
 
 import { useAuth } from "@/context/auth";
 import pb from "@/lib/pocketbase";
 
 export default function MyProfile() {
+  const theme = useTheme();
   const { user } = useAuth();
   const router = useRouter();
   const imageUrl = pb.getFileUrl(pb.authStore.model!, user.avatar);
 
   return (
-    <View>
-      <NavBar
-        title="My Profile"
-        profileButtonIsDisabled={true}
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <Stack.Screen
+        options={{
+          title: 'My Profile',
+        }}
       />
-
       <View style={{ marginTop: 40, marginBottom: 40, alignItems: 'center' }}>
         <Avatar.Image size={200} source={{ uri: imageUrl }} />
       </View>

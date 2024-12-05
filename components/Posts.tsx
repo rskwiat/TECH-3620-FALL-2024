@@ -1,22 +1,25 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, TouchableOpacity } from "react-native";
 import {
   Card,
   Text,
   Avatar,
   Button,
 } from "react-native-paper";
-import { Link } from "expo-router";
+
+import { useRouter } from "expo-router";
 
 import pb from "@/lib/pocketbase";
 import { useAuth } from "@/context/auth";
 
 export default function Posts({ data, refetch }: any) {
   const { user: currentUser } = useAuth();
+  const router = useRouter();
   const [user, setUser] = useState({} as any);
 
   const cleanedText = data.post.replace(/<\/?p>/g, '').replace(/&rsquo;/g, "'").replace(/&mdash;/g, '-');
   const date = new Date(data.created).toLocaleString();
+
 
   useEffect(() => {
     const getAvatar = async () => {
@@ -50,14 +53,18 @@ export default function Posts({ data, refetch }: any) {
       ]
     );
   }
-
   return (
     <View>
       <Card style={{ marginHorizontal: 20, marginBottom: 20 }}>
         <Card.Content>
-          <Link href={`/(tabs)/users/${user.id}`}>
+          <TouchableOpacity onPress={() => {
+            router.push({
+              pathname: `./users/${data?.userId}`,
+              params: data?.userId
+            });
+          }}>
             <Avatar.Image size={75} source={{ uri: user.image }} />
-          </Link>
+          </TouchableOpacity>
 
           <Text variant="bodySmall">{user.username}</Text>
 
