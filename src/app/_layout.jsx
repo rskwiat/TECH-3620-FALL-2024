@@ -15,7 +15,11 @@ export default function Layout() {
               presentation: 'modal'
             }}
           />
-          <Stack.Screen name='forgot-password' />
+          <Stack.Screen name='forgot-password'
+            options={{
+              presentation: 'modal'
+            }}
+          />
         </Stack>
       </AuthProvider>
     </PaperProvider>

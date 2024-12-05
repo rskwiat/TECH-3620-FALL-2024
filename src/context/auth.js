@@ -34,7 +34,7 @@ function useProtectedRoute(user, isInitialized) {
   useEffect(() => {
     // Navigation isn't set up. Do nothing.
     if (!isNavigationReady) return;
-    const inAuthGroup = segments[0] === '/';
+    const inAuthGroup = segments[0] === '/app';
 
     if (!isInitialized) return;
 
@@ -48,7 +48,7 @@ function useProtectedRoute(user, isInitialized) {
     } else if (user && inAuthGroup) {
       console.log('signed in')
       // Redirect away from the sign-in page.
-      router.replace('/');
+      router.replace('/(social)');
     }
   }, [user, segments, isNavigationReady, isInitialized]);
 }
