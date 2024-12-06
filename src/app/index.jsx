@@ -16,10 +16,10 @@ export default function Index() {
     const inAuthGroup = segments[0] === '(auth)';
     if (!inAuthGroup && !isLoggedIn) {
       console.log('Redirecting to auth...');
-      router.replace('/(auth)')
+      router.replace('/(auth)');
     } else if (isLoggedIn) {
       console.log('Redirecting to social...');
-      router.replace('/(social)')
+      router.replace('/(social)');
     }
 
   }, [segments, navigationState?.key, isInitialized]);

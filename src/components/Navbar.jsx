@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import { Appbar } from 'react-native-paper';
-import { Alert } from "react-native";
-import { useRouter } from "expo-router";
+import { Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { useAuth } from "../context/auth";
+import { useAuth } from '../context/auth';
 
 export default function NavBar({
   route,
@@ -30,8 +30,8 @@ export default function NavBar({
           }
         },
       ]
-    )
-  }
+    );
+  };
 
   return (
     <Appbar.Header mode="small">

@@ -26,7 +26,7 @@ export default function LoginForm() {
 
   const onSubmit = async ({ email, password }) => {
     await signIn(email, password);
-  }
+  };
 
   return (
     <View style={styles.formWrapper}>
@@ -81,7 +81,7 @@ export default function LoginForm() {
       </Button>
 
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({

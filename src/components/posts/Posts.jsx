@@ -1,18 +1,18 @@
-import { useState, useEffect, useMemo } from "react";
-import { View, Alert, TouchableOpacity, StyleSheet } from "react-native";
+import { useState, useEffect, useMemo } from 'react';
+import { View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import {
   Card,
   Text,
   Avatar,
   Button,
   useTheme,
-} from "react-native-paper";
+} from 'react-native-paper';
 
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
 
-import { usePocketBase } from "../../context/pocketbase";
-import { useAuth } from "../../context/auth";
-import CardButtons from "./CardButtons";
+import { usePocketBase } from '../../context/pocketbase';
+import { useAuth } from '../../context/auth';
+import CardButtons from './CardButtons';
 
 export default function Posts({ data, refetch }) {
   const theme = useTheme();
@@ -21,7 +21,7 @@ export default function Posts({ data, refetch }) {
   const router = useRouter();
   const [user, setUser] = useState({});
 
-  const cleanedText = data.post.replace(/<\/?p>/g, '').replace(/&rsquo;/g, "'").replace(/&mdash;/g, '-');
+  const cleanedText = data.post.replace(/<\/?p>/g, '').replace(/&rsquo;/g, '\'').replace(/&mdash;/g, '-');
   const date = new Date(data.created).toLocaleString();
 
   const getAvatar = async () => {
@@ -32,7 +32,7 @@ export default function Posts({ data, refetch }) {
       image: imageUrl,
       username: userCollection.username
     });
-  }
+  };
 
   useEffect(() => {
     getAvatar();
@@ -64,7 +64,7 @@ export default function Posts({ data, refetch }) {
         <CardButtons date={date} userId={data} currentUser={currentUser} refetch={refetch} />
       </Card>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

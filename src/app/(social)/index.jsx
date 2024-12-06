@@ -40,7 +40,7 @@ export default function App() {
 
         {/* @todo: look into flat list -- may help bugs */}
         {posts.map((post, i) => {
-          return <Posts key={i} data={post} refetch={fetchData} />
+          return <Posts key={i} data={post} refetch={fetchData} />;
         })}
 
         <View style={styles.prevNextButtons}>

@@ -19,5 +19,5 @@ export default function Layout() {
         </AuthProvider>
       </PocketBaseProvider>
     </PaperProvider>
-  )
+  );
 };

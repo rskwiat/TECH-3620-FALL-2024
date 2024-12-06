@@ -1,6 +1,6 @@
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
-import { usePocketBase } from "../../context/pocketbase";
+import { usePocketBase } from '../../context/pocketbase';
 
 export default function CardButtons({
   date,
@@ -27,20 +27,20 @@ export default function CardButtons({
         },
       ]
     );
-  }
+  };
 
   return (
     <Card.Content style={styles.cardButtons}
     >
       <Text variant="bodySmall">{date}</Text>
       <Button
-        onPress={() => { console.log('share post', userId.id) }}
+        onPress={() => { console.log('share post', userId.id); }}
       >
         <Text variant="bodySmall">Share</Text>
       </Button>
 
       <Button
-        onPress={() => { console.log('reply post', userId.id) }}
+        onPress={() => { console.log('reply post', userId.id); }}
       >
         <Text variant="bodySmall">Reply</Text>
       </Button>
@@ -53,13 +53,13 @@ export default function CardButtons({
         </Button>
       }
     </Card.Content>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
   cardButtons: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   }
 });
