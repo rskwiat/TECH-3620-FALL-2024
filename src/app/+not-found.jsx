@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
       }}>
         <Text style={{
           color: theme.colors.onBackground,
-        }} type='title'>This screen doesn't exist.</Text>
+        }} type='title'>This screen doesn&apos;t exist.</Text>
         <Link href='/' style={styles.link}>
           <Text style={{
             color: theme.colors.onBackground

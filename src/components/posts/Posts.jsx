@@ -1,11 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
-import { View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import {
   Card,
   Text,
   Avatar,
-  Button,
-  useTheme,
 } from 'react-native-paper';
 
 import { useRouter } from 'expo-router';
@@ -15,7 +13,6 @@ import { useAuth } from '../../context/auth';
 import CardButtons from './CardButtons';
 
 export default function Posts({ data, refetch }) {
-  const theme = useTheme();
   const { user: currentUser } = useAuth();
   const { pb } = usePocketBase();
   const router = useRouter();

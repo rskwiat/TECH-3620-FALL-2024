@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/auth';
 
 import { LoginUserSchema } from '../../schemas/loginSchema';
@@ -11,14 +10,11 @@ import { LoginUserSchema } from '../../schemas/loginSchema';
 export default function LoginForm() {
   const theme = useTheme();
   const { signIn } = useAuth();
-  const router = useRouter();
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
-    setError,
   } = useForm({
     resolver: zodResolver(LoginUserSchema),
     mode: 'onBlur'

@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
 import { usePocketBase } from '../../context/pocketbase';
@@ -6,6 +7,7 @@ export default function CardButtons({
   date,
   userId,
   currentUser,
+  refetch
 }) {
   const { pb } = usePocketBase();
 

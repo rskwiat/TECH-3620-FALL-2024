@@ -1,4 +1,5 @@
-import { useSegments, useRouter, useNavigationContainerRef, router } from 'expo-router';
+import React from 'react';
+import { useSegments, useRouter, useNavigationContainerRef } from 'expo-router';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { usePocketBase } from './pocketbase';
 
@@ -23,7 +24,7 @@ function useProtectedRoute(user, isInitialized) {
   const rootNavRef = useNavigationContainerRef();
 
   useEffect(() => {
-    const unsubscribe = rootNavRef?.addListener('state', (event) => {
+    const unsubscribe = rootNavRef?.addListener('state', () => {
       setIsNavigationReady(true);
     });
     return function cleanup() {
@@ -48,6 +49,7 @@ function useProtectedRoute(user, isInitialized) {
       router.replace('/(auth)');
       setHasRedirected(true);
     } else if (user && inAuthGroup) {
+      // eslint-disable-next-line no-console
       console.log('Redirecting to social...');
       router.replace('/(social)');
       setHasRedirected(true);
@@ -97,7 +99,6 @@ export function AuthProvider({ children }) {
       await pb?.authStore.clear();
       setUser(null);
       setIsLoggedIn(false);
-      setHasRedirected(false);
       return { user: null };
     } catch (e) {
       return { error: e };

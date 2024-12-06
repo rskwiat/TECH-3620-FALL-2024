@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
-import { Link, useRouter, useRootNavigationState, useSegments } from 'expo-router';
-import { useTheme, Text, Button } from 'react-native-paper';
+import { useTheme, Text } from 'react-native-paper';
 import { usePocketBase } from '../../context/pocketbase';
-import { useAuth } from '../../context/auth';
 
 export default function Profile() {
   const theme = useTheme();

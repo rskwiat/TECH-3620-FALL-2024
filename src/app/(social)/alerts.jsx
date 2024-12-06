@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
-import { useTheme, Text, Button } from 'react-native-paper';
+import { useTheme, Text } from 'react-native-paper';
 
 export default function Alerts() {
   const theme = useTheme();
