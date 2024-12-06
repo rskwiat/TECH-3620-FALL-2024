@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useTheme } from 'react-native-paper';
 import NavBar from '../../components/Navbar';
 
 const ICON_SIZE = 28;
@@ -34,9 +35,16 @@ const tabs = [
 ];
 
 export default function Layout() {
+  const theme = useTheme();
+
   return (
     <Tabs
       screenOptions={{
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.onBackground,
+        tabBarStyle: {
+          backgroundColor: theme.colors.background,
+        },
         header: (props) => <NavBar {...props} />
       }}>
 

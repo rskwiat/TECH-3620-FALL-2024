@@ -13,7 +13,7 @@ export default function Layout() {
             <Stack.Screen name="index" />
             <Stack.Screen name="(auth)" />
             <Stack.Screen name="(social)" />
-            <Stack.Screen name="(posts)" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="(posts)/index" options={{ presentation: 'modal' }} />
             <Stack.Screen name='(profile)' />
           </Stack>
         </AuthProvider>
