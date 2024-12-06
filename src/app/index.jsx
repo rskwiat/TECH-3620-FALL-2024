@@ -1,89 +1,32 @@
-import React, { useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView, View } from 'react-native';
-import { Link, useRootNavigationState } from 'expo-router';
-import { useTheme, Text, Button } from 'react-native-paper';
-import LoginForm from '../components/forms/login';
+import { View, ActivityIndicator, Text } from 'react-native';
 import { useAuth } from '../context/auth';
-import { useRouter, Redirect } from 'expo-router';
+import { useRootNavigationState, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
 
-export default function App() {
-  const theme = useTheme();
+export default function Index() {
+  const { isInitialized, isLoggedIn } = useAuth();
+
   const router = useRouter();
-  const { user, isLoggedIn } = useAuth();
+  const segments = useSegments();
+  const navigationState = useRootNavigationState();
 
-  const rootNavigationState = useRootNavigationState();
-  if (!rootNavigationState?.key) {
-    return null;
-  } else {
-    return <Redirect href={'/(social)'} />
-  };
+  useEffect(() => {
+    if (!isInitialized || !navigationState?.key) return;
 
+    const inAuthGroup = segments[0] === '(auth)';
+    if (!inAuthGroup && !isLoggedIn) {
+      console.log('Redirecting to auth...');
+      router.replace('/(auth)')
+    } else if (isLoggedIn) {
+      console.log('Redirecting to social...');
+      router.replace('/(social)')
+    }
 
+  }, [segments, navigationState?.key, isInitialized]);
 
   return (
-    <SafeAreaView style={{
-      ...styles.container,
-      backgroundColor: theme.colors.background,
-    }}>
-      <View style={styles.wrapper}>
-        <Text
-          variant='headlineMedium'
-          style={{
-            color: theme.colors.onBackground,
-          }}>Welcome</Text>
-        <Text
-          variant='bodyMedium'
-          style={{
-            color: theme.colors.onBackground,
-          }}>Sign in to Continue.
-        </Text>
-      </View>
-      <LoginForm />
-
-
-
-      <View style={styles.butttonWrapper}>
-        <Button
-          mode="contained">
-          <Link href='/register'>
-            <Text
-              style={{
-                color: theme.colors.onSecondary
-              }}
-            >Register</Text>
-          </Link>
-        </Button>
-
-        <Button
-          mode="contained"
-        >
-          <Link href='/forgot-password'>
-            <Text
-              style={{
-                color: theme.colors.onSecondary
-              }}
-            >Forgot Password</Text>
-          </Link>
-        </Button>
-
-      </View>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {!navigationState?.key ? <ActivityIndicator /> : <></>}
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    marginTop: 20,
-    marginHorizontal: 18,
-    marginBottom: 20,
-  },
-  butttonWrapper: {
-    marginTop: 'auto',
-    marginHorizontal: 20,
-  }
-});

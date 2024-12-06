@@ -3,13 +3,15 @@ import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text, useTheme } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/auth';
 
 import { LoginUserSchema } from '../../schemas/loginSchema';
 
 export default function LoginForm() {
   const theme = useTheme();
-  const { appSignIn } = useAuth();
+  const { signIn } = useAuth();
+  const router = useRouter();
 
   const {
     register,
@@ -23,8 +25,7 @@ export default function LoginForm() {
   });
 
   const onSubmit = async ({ email, password }) => {
-    const res = await appSignIn(email, password);
-    console.log(res);
+    await signIn(email, password);
   }
 
   return (

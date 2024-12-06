@@ -1,10 +1,12 @@
+import { useSegments, useRouter, useNavigationContainerRef, router } from 'expo-router';
 import { useState, useEffect, createContext, useContext } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigationContainerRef, useRouter, useSegments } from 'expo-router';
-import pb from '../lib/pocketbase';
+import { usePocketBase } from './pocketbase';
 
-
-const AuthContext = createContext({});
+const AuthContext = createContext({
+  signOut: () => {
+    // Default to a no-op function.
+  },
+});
 
 // This hook can be used to access the user info.
 export function useAuth() {
@@ -17,9 +19,9 @@ function useProtectedRoute(user, isInitialized) {
 
   // Check that navigation is all good
   const [isNavigationReady, setIsNavigationReady] = useState(false);
+  const [hasRedirected, setHasRedirected] = useState(false);
   const rootNavRef = useNavigationContainerRef();
 
-  // Set ups a listener to check and see if the navigator is ready.
   useEffect(() => {
     const unsubscribe = rootNavRef?.addListener('state', (event) => {
       setIsNavigationReady(true);
@@ -32,9 +34,8 @@ function useProtectedRoute(user, isInitialized) {
   }, [rootNavRef.current]);
 
   useEffect(() => {
-    // Navigation isn't set up. Do nothing.
-    if (!isNavigationReady) return;
-    const inAuthGroup = segments[0] === '/app';
+    if (!isNavigationReady || !isInitialized || hasRedirected) return;
+    const inAuthGroup = segments[0] === '(auth)';
 
     if (!isInitialized) return;
 
@@ -44,24 +45,26 @@ function useProtectedRoute(user, isInitialized) {
       !inAuthGroup
     ) {
       // Redirect to the sign-in page.
-      router.replace('/');
+      router.replace('/(auth)');
+      setHasRedirected(true);
     } else if (user && inAuthGroup) {
-      console.log('signed in')
-      // Redirect away from the sign-in page.
+      console.log('Redirecting to social...');
       router.replace('/(social)');
+      setHasRedirected(true);
     }
-  }, [user, segments, isNavigationReady, isInitialized]);
+  }, [user, segments, isNavigationReady, isInitialized, hasRedirected]);
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState();
+  const { pb } = usePocketBase();
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState();
-  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       if (pb) {
+        // Assuming your PocketBase setup includes some method to check auth status
         const isLoggedIn = pb.authStore.isValid;
         setIsLoggedIn(isLoggedIn);
         setUser(isLoggedIn ? pb.authStore.model : null);
@@ -89,52 +92,52 @@ export function AuthProvider({ children }) {
 
   const appSignOut = async () => {
     if (!pb) return { error: 'PocketBase not initialized' };
+
     try {
       await pb?.authStore.clear();
       setUser(null);
       setIsLoggedIn(false);
+      setHasRedirected(false);
       return { user: null };
     } catch (e) {
       return { error: e };
     }
   };
 
-  const createAccount = async (data) => {
+  const createAccount = async ({ email, password, passwordConfirm, name }) => {
     if (!pb) return { error: 'PocketBase not initialized' };
 
     try {
-      const resp = await pb?.collection('users').create(data);
-      await setUser(pb?.authStore.isValid ? pb.authStore.model : null);
-      await setIsLoggedIn(pb?.authStore.isValid ?? false);
-      return { user: resp, pb };
-    } catch (e) {
-      return { error: e };
-    }
-  }
+      const resp = await pb.collection('users').create({
+        email,
+        password,
+        passwordConfirm,
+        name: name ?? '',
+      });
 
-  const resetPassword = async (email) => {
-    if (!pb) return { error: 'PocketBase not initialized' };
+      // Unsuccessful response throws, so we should be fine here
 
-    try {
-      const resp = await pb.collection('users').requestPasswordReset(email);
+      // Send a verification email if you want
+      // await pb.collection('users').requestVerification(email);
+
       return { user: resp };
     } catch (e) {
-      return { error: e };
+      return { error: e.response };
     }
-  }
+  };
 
   useProtectedRoute(user, isInitialized);
 
   return (
     <AuthContext.Provider
       value={{
-        appSignIn,
-        appSignOut,
-        createAccount,
-        user,
-        resetPassword,
+        signIn: (email, password) => appSignIn(email, password),
+        signOut: () => appSignOut(),
+        createAccount: ({ email, password, passwordConfirm, name }) =>
+          createAccount({ email, password, passwordConfirm, name }),
         isLoggedIn,
-        isInitialized
+        isInitialized,
+        user,
       }}
     >
       {children}

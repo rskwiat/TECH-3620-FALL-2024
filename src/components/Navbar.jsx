@@ -1,6 +1,7 @@
 import React from "react";
 import { Appbar } from 'react-native-paper';
 import { Alert } from "react-native";
+import { useRouter } from "expo-router";
 import { getHeaderTitle } from '@react-navigation/elements';
 import { useAuth } from "../context/auth";
 
@@ -8,8 +9,9 @@ export default function NavBar({
   route,
   options
 }) {
-  const { appSignOut } = useAuth();
+  const { signOut } = useAuth();
   const title = getHeaderTitle(options, route.name);
+  const router = useRouter();
 
   const onLogoutPress = () => {
     Alert.alert(
@@ -22,7 +24,10 @@ export default function NavBar({
         },
         {
           text: 'OK',
-          onPress: () => appSignOut()
+          onPress: async () => {
+            await signOut();
+            router.replace('/(auth)');
+          }
         },
       ]
     )
