@@ -10,6 +10,13 @@ export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
+    'settings': {
+      'react': {
+        'version': 'detect'
+      }
+    }
+  },
+  {
     rules: {
       'no-console': ['warn'],
       'quotes': ['error', 'single'],
