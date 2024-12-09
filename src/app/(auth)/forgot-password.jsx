@@ -1,11 +1,25 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useTheme, Text } from 'react-native-paper';
+import ResetPassword from '../../components/forms/forgotPassword';
 
 export default function ForgotPassword() {
+  const theme = useTheme();
+
   return (
-    <View style={styles.container}>
-      <Text>ForgotPassword</Text>
+    <View style={{
+      ...styles.container,
+      backgroundColor: theme.colors.background,
+    }}>
+      <Text
+        variant='headlineSmall'
+        style={{
+          ...styles.headline,
+          color: theme.colors.onBackground,
+        }}>Forgot Password?
+      </Text>
+      <ResetPassword />
       <StatusBar style="auto" />
     </View>
   );
@@ -14,8 +28,9 @@ export default function ForgotPassword() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  headline: {
+    marginTop: 20,
+    paddingHorizontal: 18
+  }
 });

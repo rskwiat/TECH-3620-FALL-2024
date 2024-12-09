@@ -105,14 +105,15 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const createAccount = async ({ email, password, passwordConfirm, name }) => {
+  const createAccount = async ({ email, password, username, name }) => {
     if (!pb) return { error: 'PocketBase not initialized' };
 
     try {
       const resp = await pb.collection('users').create({
         email,
+        username,
         password,
-        passwordConfirm,
+        passwordConfirm: password,
         name: name ?? '',
       });
 
@@ -127,6 +128,17 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const resetPassword = async (email) => {
+    if (!pb) return { error: 'PocketBase not initialized' };
+
+    try {
+      const resp = await pb.collection('users').requestPasswordReset(email);
+      return { user: resp };
+    } catch (e) {
+      return { error: e };
+    }
+  };
+
   useProtectedRoute(user, isInitialized);
 
   return (
@@ -134,8 +146,9 @@ export function AuthProvider({ children }) {
       value={{
         signIn: (email, password) => appSignIn(email, password),
         signOut: () => appSignOut(),
-        createAccount: ({ email, password, passwordConfirm, name }) =>
-          createAccount({ email, password, passwordConfirm, name }),
+        createAccount: ({ email, password, username, name }) =>
+          createAccount({ email, password, username, name }),
+        resetPassword,
         isLoggedIn,
         isInitialized,
         user,

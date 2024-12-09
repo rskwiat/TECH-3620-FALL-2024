@@ -1,12 +1,16 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
-import { useTheme, Text } from 'react-native-paper';
+import { useTheme, Text, Avatar, Button } from 'react-native-paper';
 import { usePocketBase } from '../../context/pocketbase';
+import { useAuth } from '../../context/auth';
 
 export default function Profile() {
   const theme = useTheme();
   const { pb } = usePocketBase();
+  const { user } = useAuth();
+  const imageUrl = pb.files.getUrl(pb.authStore.model, user.avatar);
+
 
   return (
     <SafeAreaView style={{
@@ -14,11 +18,23 @@ export default function Profile() {
       backgroundColor: theme.colors.background,
     }}>
       <View style={styles.wrapper}>
-        <Text
-          variant='headlineMedium'
-          style={{
-            color: theme.colors.onBackground,
-          }}>Profile Coming Soon</Text>
+
+        <Avatar.Image size={200} source={{ uri: imageUrl }} />
+
+        <Text variant="titleSmall">Email Address:</Text>
+        <Text variant="bodySmall">{user.email}</Text>
+        <Text variant="titleSmall">User Name:</Text>
+        <Text variant="bodySmall">{user.username}</Text>
+        <Text variant="titleSmall">Profile:</Text>
+        <Text variant="bodySmall">{user.profile}</Text>
+
+        <Button
+          mode="contained"
+          style={{ marginHorizontal: 40, marginTop: 20 }}
+          onPress={() => console.log('edit profile button')}>
+          Edit Profile
+        </Button>
+
       </View>
 
       <StatusBar style="auto" />
